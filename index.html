@@ -51,6 +51,7 @@ var bombs;
 
 var game = new Phaser.Game(config);
 var gameOver;
+var iteration = 0;
 // END Globals
 
 function preload()
@@ -80,17 +81,31 @@ function create()
 
 
 	// Player Character
-	player = this.physics.add.sprite(400, 0, 'dude');
 
-	ground = this.add.sprite(400, 300, 'dude');
+
+
+	//player = this.physics.add.sprite(400, 0, 'dude');
+	ground = this.add.sprite(400, 300, 'dude2');
+	player = this.physics.add.sprite(400, -200, 'dude');
+	player.disableBody();
+
+	this.physics.accelerateToObject(player, ground, 60, 300, 300);
+
+	spawnNextPlayable();
+
+	//player = this.physics.add.sprite(400, 0, 'dude');
+	//player.setCollideWorldBounds(true);
+	//this.physics.accelerateToObject(player, ground, 60, 300, 300);
 
 	//player.setBounce(0);
-	player.setCollideWorldBounds(true);
+	//player.setCollideWorldBounds(true);
 	//player.body.setGravityY(10)
 
 	//this.physics.moveToObject(player, ground, 1, 6000);
-	this.physics.accelerateToObject(player, ground, 60, 300, 300);
+	//this.physics.accelerateToObject(player, ground, 60, 300, 300);
 
+
+/*
 	this.anims.create({
 
 		key: 'left',
@@ -117,11 +132,10 @@ function create()
 
 	});
 
+*/
 
-	this.physics.add.collider(player, platforms);
-
+	this.physics.add.collider(player, platforms, hitPlatform, null, this);
 	cursors = this.input.keyboard.createCursorKeys();
-
 
 /*
 	// Stars
@@ -171,7 +185,7 @@ function cursorKeyInputHandler() {
 
 		//player.setVelocityX(-160);
 		player.setPosition(player.x - 10, player.y);
-		player.anims.play('left', true);
+		//player.anims.play('left', true);
 
 	}
 	else if (cursors.right.isDown)
@@ -179,7 +193,7 @@ function cursorKeyInputHandler() {
 
 		//player.setVelocityX(160);
 		player.setPosition(player.x + 10, player.y);
-		player.anims.play('right', true);
+		//player.anims.play('right', true);
 
 	}
 	else if (cursors.down.isDown)
@@ -191,7 +205,7 @@ function cursorKeyInputHandler() {
 	else
 	{
 		//player.setVelocityX(0);
-		player.anims.play('turn');
+		//player.anims.play('turn');
 	}
 
 	if (cursors.up.isDown && player.body.touching.down)
@@ -243,8 +257,30 @@ function starHitStar(star1, star2)
  	star2.body.stop();
 }
 
-function starHitPlatform(star, platform)
+function hitPlatform(player, platform)
 {
+	spawnNextPlayable();
+	player.setVelocityY(0);
+	player.body.stop();
+}
+
+function spawnNextPlayable()
+{
+
+	if (iteration == 0) 
+	{
+		player.enableBody();
+		iteration++;
+		console.log("iteration: " + iteration);
+
+	} else if (iteration == 1)
+	{
+		console.log("iteration: " + iteration);
+		console.log("Spwan the next one?");
+	} else 
+	{
+		console.log("Nothing left to Iterate?");
+	}
 
 }
 
