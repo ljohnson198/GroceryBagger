@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Making your first Phaser 3 Game</title>
+    <title>Grocery Bagger</title>
     <script src="dist/phaser.js"></script>
     <style type="text/css">
         body {
@@ -23,8 +23,8 @@
 			default: 'arcade',
 			arcade: {
 				//gravity: { y: 300 },
-				debug: true
-				//fps: 130
+				debug: true,
+				fps: 130
 			}
 
 		},
@@ -75,97 +75,31 @@ function create()
 
 	platforms.create(400,568, 'ground', {immovable: true}).setScale(2).refreshBody();
 
-	//platforms.create(600,400, 'ground');
-	//platforms.create(50,250, 'ground');
-	//platforms.create(750,220, 'ground');
-
-
 	// Player Character
 
-
-
-	//player = this.physics.add.sprite(400, 0, 'dude');
 	ground = this.add.sprite(400, 300, 'dude2');
 	player = this.physics.add.sprite(400, -200, 'dude');
 	player.disableBody();
 
+	player2 = this.physics.add.sprite(400, -200, 'dude');
+	player2.disableBody();
+
 	this.physics.accelerateToObject(player, ground, 60, 300, 300);
+	this.physics.accelerateToObject(player2, ground, 60, 300, 300);
+
+	controlledPlayer = player;
 
 	spawnNextPlayable();
 
-	//player = this.physics.add.sprite(400, 0, 'dude');
-	//player.setCollideWorldBounds(true);
-	//this.physics.accelerateToObject(player, ground, 60, 300, 300);
-
-	//player.setBounce(0);
-	//player.setCollideWorldBounds(true);
-	//player.body.setGravityY(10)
-
-	//this.physics.moveToObject(player, ground, 1, 6000);
-	//this.physics.accelerateToObject(player, ground, 60, 300, 300);
-
-
-/*
-	this.anims.create({
-
-		key: 'left',
-		frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-		frameRate: 10,
-		repeat: -1
-
-	});
-
-	this.anims.create({
-
-		key: 'turn',
-		frames: [ { key: 'dude', frame: 4 } ],
-		frameRate: 20
-
-	});
-
-	this.anims.create({
-
-		key: 'right',
-		frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-		frameRate: 10,
-		repeat: -1
-
-	});
-
-*/
-
 	this.physics.add.collider(player, platforms, hitPlatform, null, this);
+	this.physics.add.collider(player2, platforms, hitPlatform, null, this);
+
+	this.physics.add.collider(player, player2, hitPlatform, null, this);
 	cursors = this.input.keyboard.createCursorKeys();
 
-/*
-	// Stars
-	stars = this.physics.add.group(
-	{
 
-		key: 'star',
-		repeat: 6,
-		bounce: 0,
-		setXY: { x: 400, y: 0, stepY: -500 },
-
-	}
-	);
-
-	stars.children.iterate(function (child) {
-
-		//this.body.moveToObject();
-		//child.setBounceY(Phaser.Math.FloatBetween(0.4,0.8));
-
-	});
-
-	this.physics.add.collider(stars, platforms, starHitPlatform, null, this);
-	this.physics.add.collider(stars, stars, starHitStar, null, this);
-	this.physics.add.overlap(player, stars, collectStar, null, this);
-*/
-
-	// Bombs
-	bombs = this.physics.add.group();
-	this.physics.add.collider(bombs, platforms);
-	this.physics.add.collider(player, bombs, hitBomb, null, this);
+	players = this.physics.add.group();
+	this.physics.add.collider(players, platforms, hitPlatform, null, this);
 
 
 
@@ -182,74 +116,23 @@ function cursorKeyInputHandler() {
 
 	if (cursors.left.isDown)
 	{
-
-		//player.setVelocityX(-160);
-		player.setPosition(player.x - 10, player.y);
-		//player.anims.play('left', true);
-
+		controlledPlayer.setPosition(controlledPlayer.x - 10, controlledPlayer.y);
 	}
 	else if (cursors.right.isDown)
 	{
-
-		//player.setVelocityX(160);
-		player.setPosition(player.x + 10, player.y);
-		//player.anims.play('right', true);
-
+		controlledPlayer.setPosition(controlledPlayer.x + 10, controlledPlayer.y);
 	}
 	else if (cursors.down.isDown)
 	{
-
-		player.setPosition(player.x, player.y + 10);
-
+		controlledPlayer.setPosition(controlledPlayer.x, controlledPlayer.y + 10);
 	}	
 	else
 	{
-		//player.setVelocityX(0);
-		//player.anims.play('turn');
+		controlledPlayer.setVelocityX(0);
 	}
-
-	if (cursors.up.isDown && player.body.touching.down)
-	{
-		player.setVelocityY(-330);
-	}
-
-
 
 }
 
-function collectStar(player, star)
-{
-	star.disableBody(true, true);
-
-	score += 10;
-	scoreText.setText('Score: ' + score);
-
-	if (stars.countActive(true) === 0)
-	{
-		stars.children.iterate(function(child) {
-
-			child.enableBody(true, child.x, 0, true, true);
-
-		});
-
-		var x = (player.x < 400) ? Phaser.Math.Between(400,800) : Phaser.Math.Between(0,400);
-
-		var bomb = bombs.create(x, 16, 'bomb');
-		bomb.setBounce(1);
-		bomb.setCollideWorldBounds(true);
-		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-		bomb.allowGravity = false;
-
-	}
-}
-
-function hitBomb(player, bomb)
-{
-	this.physics.pause();
-	player.setTint(0xff00000);
-	player.anims.play('turn');
-	gameOver = true;
-}
 
 function starHitStar(star1, star2)
 {
@@ -262,6 +145,9 @@ function hitPlatform(player, platform)
 	spawnNextPlayable();
 	player.setVelocityY(0);
 	player.body.stop();
+
+	//platform.setVelocityY(0);
+	platform.body.stop();
 }
 
 function spawnNextPlayable()
@@ -277,6 +163,10 @@ function spawnNextPlayable()
 	{
 		console.log("iteration: " + iteration);
 		console.log("Spwan the next one?");
+		player2.enableBody();
+		controlledPlayer = player2;
+		iteration++;
+
 	} else 
 	{
 		console.log("Nothing left to Iterate?");
