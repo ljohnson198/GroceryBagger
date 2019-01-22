@@ -52,6 +52,7 @@ var bombs;
 var game = new Phaser.Game(config);
 var gameOver;
 var iteration = 0;
+var stopSpawning = false;
 // END Globals
 
 function preload()
@@ -62,12 +63,20 @@ function preload()
 	this.load.image('star','assets/star.png');
 	this.load.image('bomb','assets/bomb.png');
 	this.load.spritesheet('dude','assets/dude.png',{ frameWidth: 32, frameHeight: 48 });
+
+	this.load.image('eggs','assets/eggs.png');
+	this.load.image('milk_1percent','assets/milk_1percent.png');
+	this.load.image('dogbriscuts','assets/dogbriscuts.png');
+	this.load.image('fiddle_faddle','assets/fiddle_faddle.png');
+
+
+
 }
 
 function create()
 {
 
-	this.add.image(400,300, 'sky');
+	//this.add.image(400,300, 'sky');
 	scoreText = this.add.text(16,16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
 	// Platforms	
@@ -77,28 +86,52 @@ function create()
 
 	// Player Character
 
-	ground = this.add.sprite(400, 300, 'dude2');
-	player = this.physics.add.sprite(400, -200, 'dude');
+	ground = this.add.sprite(400, 100, 'dude2');
+
+	player = this.physics.add.sprite(400, -200, 'eggs');
 	player.disableBody();
 
-	player2 = this.physics.add.sprite(400, -200, 'dude');
+	player2 = this.physics.add.sprite(400, -200, 'milk_1percent');
 	player2.disableBody();
+
+	player3 = this.physics.add.sprite(400, -200, 'dogbriscuts');
+	player3.disableBody();
+
+	player4 = this.physics.add.sprite(400, -200, 'fiddle_faddle');
+	player4.disableBody();
 
 	this.physics.accelerateToObject(player, ground, 60, 300, 300);
 	this.physics.accelerateToObject(player2, ground, 60, 300, 300);
+	this.physics.accelerateToObject(player3, ground, 60, 300, 300);
+	this.physics.accelerateToObject(player4, ground, 60, 300, 300);
 
 	controlledPlayer = player;
+	cursors = this.input.keyboard.createCursorKeys();
 
 	spawnNextPlayable();
 
 	this.physics.add.collider(player, platforms, hitPlatform, null, this);
 	this.physics.add.collider(player2, platforms, hitPlatform, null, this);
+	this.physics.add.collider(player3, platforms, hitPlatform, null, this);
+	this.physics.add.collider(player4, platforms, hitPlatform, null, this);
 
-	this.physics.add.collider(player, player2, hitPlatform, null, this);
-	cursors = this.input.keyboard.createCursorKeys();
+	this.physics.add.collider(player, player2, hitPlatform, null, this);	
+	this.physics.add.collider(player, player3, hitPlatform, null, this);
+	this.physics.add.collider(player, player4, hitPlatform, null, this);
+
+	this.physics.add.collider(player2, player3, hitPlatform, null, this);
+	this.physics.add.collider(player2, player4, hitPlatform, null, this);
+
+	this.physics.add.collider(player3, player4, hitPlatform, null, this);
+
+
+
+
+
 
 
 	players = this.physics.add.group();
+
 	this.physics.add.collider(players, platforms, hitPlatform, null, this);
 
 
@@ -124,7 +157,7 @@ function cursorKeyInputHandler() {
 	}
 	else if (cursors.down.isDown)
 	{
-		controlledPlayer.setPosition(controlledPlayer.x, controlledPlayer.y + 10);
+		//controlledPlayer.setPosition(controlledPlayer.x, controlledPlayer.y + 10);
 	}	
 	else
 	{
@@ -142,12 +175,24 @@ function starHitStar(star1, star2)
 
 function hitPlatform(player, platform)
 {
+	console.log(player.texture.key + " hit " + platform.texture.key);
+
+	if (stopSpawning == false) {
 	spawnNextPlayable();
+	}
+
+
+	player.body.immovable = true;
+	player.body.allowGravity = false;
 	player.setVelocityY(0);
 	player.body.stop();
-
 	//platform.setVelocityY(0);
+	//platform.setVelocityY(0);
+	platform.body.immovable = true;
+	platform.body.allowGravity = false;
 	platform.body.stop();
+	
+
 }
 
 function spawnNextPlayable()
@@ -162,14 +207,34 @@ function spawnNextPlayable()
 	} else if (iteration == 1)
 	{
 		console.log("iteration: " + iteration);
-		console.log("Spwan the next one?");
+		console.log("Spawn the next one?");
 		player2.enableBody();
 		controlledPlayer = player2;
 		iteration++;
 
-	} else 
+	} else if (iteration == 2)
 	{
-		console.log("Nothing left to Iterate?");
+		console.log("iteration: " + iteration);
+		console.log("Spawn the next one?");
+		player3.enableBody();
+		controlledPlayer = player3;
+		iteration++;
+
+	} else if (iteration == 3)
+	{
+		console.log("iteration: " + iteration);
+		console.log("Spawn the next one?");
+		player4.enableBody();
+		controlledPlayer = player4;
+		iteration++;
+
+	} 
+
+
+
+	else 
+	{
+		//console.log("Nothing left to Iterate?");
 	}
 
 }
