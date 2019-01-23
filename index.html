@@ -43,7 +43,13 @@ var score = 0;
 var scoreText;
 
 var platforms;
+
+var players;
 var player;
+var player2;
+var player3;
+var player4;
+
 var cursors;
 var stars;
 
@@ -53,6 +59,8 @@ var game = new Phaser.Game(config);
 var gameOver;
 var iteration = 0;
 var stopSpawning = false;
+
+
 // END Globals
 
 function preload()
@@ -81,35 +89,52 @@ function create()
 
 	// Platforms	
 	platforms = this.physics.add.staticGroup();
-
 	platforms.create(400,568, 'ground', {immovable: true}).setScale(2).refreshBody();
+
+
+
+
+
 
 	// Player Character
 
 	ground = this.add.sprite(400, 100, 'dude2');
 
-	player = this.physics.add.sprite(400, -200, 'eggs');
-	player.disableBody();
 
-	player2 = this.physics.add.sprite(400, -200, 'milk_1percent');
-	player2.disableBody();
 
-	player3 = this.physics.add.sprite(400, -200, 'dogbriscuts');
-	player3.disableBody();
+	players = this.physics.add.group();
+	players.create(400,-200, 'eggs', 1, true, true);
+	//players.create(400,-200, 'milk_1percent', 1, true, true);
+	//players.getFirstNth(2,true).disableBody();
 
-	player4 = this.physics.add.sprite(400, -200, 'fiddle_faddle');
-	player4.disableBody();
 
-	this.physics.accelerateToObject(player, ground, 60, 300, 300);
-	this.physics.accelerateToObject(player2, ground, 60, 300, 300);
-	this.physics.accelerateToObject(player3, ground, 60, 300, 300);
-	this.physics.accelerateToObject(player4, ground, 60, 300, 300);
+	//player = this.physics.add.sprite(400, -200, 'eggs');
+	//player.disableBody();
 
-	controlledPlayer = player;
+	//player2 = this.physics.add.sprite(400, -200, 'milk_1percent');
+	//player2.disableBody();
+
+	//player3 = this.physics.add.sprite(400, -200, 'dogbriscuts');
+	//player3.disableBody();
+
+	//player4 = this.physics.add.sprite(400, -200, 'fiddle_faddle');
+	//player4.disableBody();
+
+	//this.physics.accelerateToObject(player, ground, 60, 300, 300);
+	//this.physics.accelerateToObject(player2, ground, 60, 300, 300);
+	//this.physics.accelerateToObject(player3, ground, 60, 300, 300);
+	//this.physics.accelerateToObject(player4, ground, 60, 300, 300);
+	//this.physics.accelerateToObject(player4, ground, 60, 300, 300);
+	this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
+	//console.log(players.getFirstNth(1, true).texture.key);
+
+	controlledPlayer = players.getFirstNth(1,true);
 	cursors = this.input.keyboard.createCursorKeys();
 
 	spawnNextPlayable();
 
+
+/*
 	this.physics.add.collider(player, platforms, hitPlatform, null, this);
 	this.physics.add.collider(player2, platforms, hitPlatform, null, this);
 	this.physics.add.collider(player3, platforms, hitPlatform, null, this);
@@ -123,6 +148,7 @@ function create()
 	this.physics.add.collider(player2, player4, hitPlatform, null, this);
 
 	this.physics.add.collider(player3, player4, hitPlatform, null, this);
+*/
 
 
 
@@ -130,8 +156,7 @@ function create()
 
 
 
-	players = this.physics.add.group();
-
+	this.physics.add.collider(players, players, hitPlatform, null, this);
 	this.physics.add.collider(players, platforms, hitPlatform, null, this);
 
 
@@ -178,7 +203,7 @@ function hitPlatform(player, platform)
 	console.log(player.texture.key + " hit " + platform.texture.key);
 
 	if (stopSpawning == false) {
-	spawnNextPlayable();
+	//spawnNextPlayable();
 	}
 
 
@@ -200,7 +225,11 @@ function spawnNextPlayable()
 
 	if (iteration == 0) 
 	{
-		player.enableBody();
+		console.log("iteration: " + iteration);
+		console.log("Spawn the next one?");
+
+		players.getFirstNth(2,true).enableBody();		
+		controlledPlayer = players.getFirstNth(2,true);
 		iteration++;
 		console.log("iteration: " + iteration);
 
