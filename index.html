@@ -39,6 +39,7 @@
 	};
 
 //Globals
+var currentScene = this;
 var score = 0;
 var scoreText;
 
@@ -85,15 +86,12 @@ function create()
 {
 
 	//this.add.image(400,300, 'sky');
+
 	scoreText = this.add.text(16,16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
 	// Platforms	
 	platforms = this.physics.add.staticGroup();
 	platforms.create(400,568, 'ground', {immovable: true}).setScale(2).refreshBody();
-
-
-
-
 
 
 	// Player Character
@@ -104,8 +102,9 @@ function create()
 
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
-	//players.create(400,-200, 'milk_1percent', 1, true, true);
-	//players.getFirstNth(2,true).disableBody();
+
+	//players.create(400,-200, 'milk_1percent', 1, true, false);
+	//players.getFirstNth(1).disableBody();
 
 
 	//player = this.physics.add.sprite(400, -200, 'eggs');
@@ -125,7 +124,14 @@ function create()
 	//this.physics.accelerateToObject(player3, ground, 60, 300, 300);
 	//this.physics.accelerateToObject(player4, ground, 60, 300, 300);
 	//this.physics.accelerateToObject(player4, ground, 60, 300, 300);
+
+	console.log(players.getFirstNth(1));
+
+	//players.getFirstNth(1,false).active = true;
+	//console.log(players.getFirstNth(1,false).texture.key + " " + players.getFirstNth(1,false).active);
 	this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
+	console.log(this);
+
 	//console.log(players.getFirstNth(1, true).texture.key);
 
 	controlledPlayer = players.getFirstNth(1,true);
@@ -149,12 +155,6 @@ function create()
 
 	this.physics.add.collider(player3, player4, hitPlatform, null, this);
 */
-
-
-
-
-
-
 
 	this.physics.add.collider(players, players, hitPlatform, null, this);
 	this.physics.add.collider(players, platforms, hitPlatform, null, this);
@@ -203,7 +203,7 @@ function hitPlatform(player, platform)
 	console.log(player.texture.key + " hit " + platform.texture.key);
 
 	if (stopSpawning == false) {
-	//spawnNextPlayable();
+	spawnNextPlayable();
 	}
 
 
@@ -225,13 +225,14 @@ function spawnNextPlayable()
 
 	if (iteration == 0) 
 	{
+		console.log(Phaser.Physics.Arcade);
+		currentScene.add.collider(players, players, hitPlatform, null, this);
 		console.log("iteration: " + iteration);
-		console.log("Spawn the next one?");
-
-		players.getFirstNth(2,true).enableBody();		
-		controlledPlayer = players.getFirstNth(2,true);
+		console.log("Spawn the next one");	
+		controlledPlayer = players.getFirstNth(1,true);
 		iteration++;
 		console.log("iteration: " + iteration);
+
 
 	} else if (iteration == 1)
 	{

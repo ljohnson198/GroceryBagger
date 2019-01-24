@@ -1,0 +1,51 @@
+Container7: @here - 'this' seems to change from the Scene to the Window object in my code. I don't know what would cause it to change.
+[8:39 AM] Container7:
+
+[8:40 AM] Container7: Both of those are the  output of console.log(this); in two different spots in the same code
+[8:40 AM] Container7: My goal is to reference the physics system in the second spot, but I'm not sure how to do that without using 'this'.
+[8:40 AM] Container7: (arcade physics)
+[8:44 AM] Antriel: I recommend reading up about scope in JavaScript.
+[8:44 AM] Container7: Thank you!
+==
+
+if we declare a variable ANYWHERE in the code without 'var' in the declaration then it becomes global, cool!
+
+==
+
+Any functions defined within another can access the 'outer' function(s) variables.
+
+But the outer function can't access the inner function variables.
+
+==
+
+3 ways to call functions in javascript
+
+	Method
+
+		function hats() {
+
+			console.log(this); // global object
+
+		};
+
+
+	On It's Own
+
+		myhats = {};
+
+		myhats.foo = function () {
+
+			console.log(this); // points to myhats object
+
+		}
+
+	As an Event Handler
+
+		var hat = document.getElementById("myHatID");
+		hat.addEventListener("click", function() {
+
+			console.log(this); // points to hat
+
+		}, false);
+
+	
