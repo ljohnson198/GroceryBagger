@@ -10,7 +10,9 @@
         }
     </style>
 </head>
-<body bgcolor="Black">
+
+<body bgcolor="Black" align="center">
+
 
 <script type="text/javascript">
 
@@ -23,7 +25,7 @@
 			default: 'arcade',
 			arcade: {
 				//gravity: { y: 300 },
-				debug: true,
+				debug: false,
 				fps: 130
 			}
 
@@ -67,7 +69,8 @@ var stopSpawning = false;
 function preload()
 {
 
-	this.load.image('sky','assets/sky.png');
+
+	this.load.image('background','assets/basicbaggingbackground.png');
 	this.load.image('ground','assets/platform.png');
 	this.load.image('star','assets/star.png');
 	this.load.image('bomb','assets/bomb.png');
@@ -81,80 +84,37 @@ function preload()
 }
 
 function create()
-{
+{	
 
-	//this.add.image(400,300, 'sky');
-
-	scoreText = this.add.text(16,16, 'Score: 0', { fontSize: '32px', fill: '#000' });
-
-	// Platforms	
-	platforms = this.physics.add.staticGroup();
-	platforms.create(400,568, 'ground', {immovable: true}).setScale(2).refreshBody();
-
-	// Player Character
-
+	// Background
 	ground = this.add.sprite(400, 100, 'dude2');
+
+	// Platforms		
+	platforms = this.physics.add.staticGroup();
+	platforms.create(400,606, 'ground', {immovable: true}).setScale(2).refreshBody();
+
+	backGround = this.add.sprite(400, 300, 'background');
+
+	// 'Ground' (used for Physics)
+	
+
+	// Player Character	
 
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
 
-	//players.create(400,-200, 'milk_1percent', 1, true, false);
-	//players.getFirstNth(1).disableBody();
-
-
-	//player = this.physics.add.sprite(400, -200, 'eggs');
-	//player.disableBody();
-
-	//player2 = this.physics.add.sprite(400, -200, 'milk_1percent');
-	//player2.disableBody();
-
-	//player3 = this.physics.add.sprite(400, -200, 'dogbriscuts');
-	//player3.disableBody();
-
-	//player4 = this.physics.add.sprite(400, -200, 'fiddle_faddle');
-	//player4.disableBody();
-
-	//this.physics.accelerateToObject(player, ground, 60, 300, 300);
-	//this.physics.accelerateToObject(player2, ground, 60, 300, 300);
-	//this.physics.accelerateToObject(player3, ground, 60, 300, 300);
-	//this.physics.accelerateToObject(player4, ground, 60, 300, 300);
-	//this.physics.accelerateToObject(player4, ground, 60, 300, 300);
-
-	console.log(players.getFirstNth(1));
-
-	//players.getFirstNth(1,false).active = true;
-	//console.log(players.getFirstNth(1,false).texture.key + " " + players.getFirstNth(1,false).active);
 	this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
-	console.log(this);
-
-	//console.log(players.getFirstNth(1, true).texture.key);
 
 	controlledPlayer = players.getFirstNth(1,true);
 	cursors = this.input.keyboard.createCursorKeys();
 
+	// Spawn First Item
 	spawnNextPlayable();
 
-
-/*
-	this.physics.add.collider(player, platforms, hitPlatform, null, this);
-	this.physics.add.collider(player2, platforms, hitPlatform, null, this);
-	this.physics.add.collider(player3, platforms, hitPlatform, null, this);
-	this.physics.add.collider(player4, platforms, hitPlatform, null, this);
-
-	this.physics.add.collider(player, player2, hitPlatform, null, this);	
-	this.physics.add.collider(player, player3, hitPlatform, null, this);
-	this.physics.add.collider(player, player4, hitPlatform, null, this);
-
-	this.physics.add.collider(player2, player3, hitPlatform, null, this);
-	this.physics.add.collider(player2, player4, hitPlatform, null, this);
-
-	this.physics.add.collider(player3, player4, hitPlatform, null, this);
-*/
+	// Colliders (fpr impacts between object groups)
 
 	this.physics.add.collider(players, players, hitPlatform, null, this);
 	this.physics.add.collider(players, platforms, hitPlatform, null, this);
-
-
 
 }
 
