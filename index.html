@@ -10,7 +10,7 @@
         }
     </style>
 </head>
-<body>
+<body bgcolor="Black">
 
 <script type="text/javascript">
 
@@ -78,8 +78,6 @@ function preload()
 	this.load.image('dogbriscuts','assets/dogbriscuts.png');
 	this.load.image('fiddle_faddle','assets/fiddle_faddle.png');
 
-
-
 }
 
 function create()
@@ -93,12 +91,9 @@ function create()
 	platforms = this.physics.add.staticGroup();
 	platforms.create(400,568, 'ground', {immovable: true}).setScale(2).refreshBody();
 
-
 	// Player Character
 
 	ground = this.add.sprite(400, 100, 'dude2');
-
-
 
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
@@ -172,21 +167,24 @@ function update()
 
 function cursorKeyInputHandler() {
 
-	if (cursors.left.isDown)
-	{
-		controlledPlayer.setPosition(controlledPlayer.x - 10, controlledPlayer.y);
-	}
-	else if (cursors.right.isDown)
-	{
-		controlledPlayer.setPosition(controlledPlayer.x + 10, controlledPlayer.y);
-	}
-	else if (cursors.down.isDown)
-	{
-		//controlledPlayer.setPosition(controlledPlayer.x, controlledPlayer.y + 10);
-	}	
-	else
-	{
-		controlledPlayer.setVelocityX(0);
+	if (controlledPlayer) {
+		if (cursors.left.isDown)
+		{
+			controlledPlayer.setPosition(controlledPlayer.x - 10, controlledPlayer.y);
+		}
+		else if (cursors.right.isDown)
+		{
+			controlledPlayer.setPosition(controlledPlayer.x + 10, controlledPlayer.y);
+		}
+		else if (cursors.down.isDown)
+		{
+			//controlledPlayer.setPosition(controlledPlayer.x, controlledPlayer.y + 10);
+		}	
+		else
+		{
+			//controlledPlayer.setVelocityX(0);
+		}
+
 	}
 
 }
@@ -226,7 +224,7 @@ function spawnNextPlayable()
 	if (iteration == 0) 
 	{
 		console.log(Phaser.Physics.Arcade);
-		currentScene.add.collider(players, players, hitPlatform, null, this);
+		//currentScene.add.collider(players, players, hitPlatform, null, this);
 		console.log("iteration: " + iteration);
 		console.log("Spawn the next one");	
 		controlledPlayer = players.getFirstNth(1,true);
@@ -238,7 +236,7 @@ function spawnNextPlayable()
 	{
 		console.log("iteration: " + iteration);
 		console.log("Spawn the next one?");
-		player2.enableBody();
+		//player2.enableBody();
 		controlledPlayer = player2;
 		iteration++;
 

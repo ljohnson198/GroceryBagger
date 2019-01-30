@@ -17,6 +17,8 @@ Any functions defined within another can access the 'outer' function(s) variable
 But the outer function can't access the inner function variables.
 
 ==
+https://javascriptplayground.com/javascript-variable-scope-this/
+
 
 3 ways to call functions in javascript
 
@@ -48,4 +50,3 @@ But the outer function can't access the inner function variables.
 
 		}, false);
 
-	
