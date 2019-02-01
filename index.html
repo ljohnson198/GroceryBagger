@@ -71,6 +71,8 @@ function preload()
 
 
 	this.load.image('background','assets/basicbaggingbackground.png');
+
+	this.load.image('transparent','assets/transparent.png');
 	this.load.image('ground','assets/platform.png');
 	this.load.image('star','assets/star.png');
 	this.load.image('bomb','assets/bomb.png');
@@ -93,6 +95,11 @@ function create()
 	platforms = this.physics.add.staticGroup();
 	platforms.create(400,606, 'ground', {immovable: true}).setScale(2).refreshBody();
 
+	sidePlatforms = this.physics.add.staticGroup();
+	sidePlatforms.create(128,558, 'ground2', {immovable: true}).setDisplaySize(32,1600).refreshBody();
+	sidePlatforms.create(675,558, 'ground2', {immovable: true}).setDisplaySize(32,1600).refreshBody();
+
+	// 
 	backGround = this.add.sprite(400, 300, 'background');
 
 	// 'Ground' (used for Physics)
@@ -103,7 +110,9 @@ function create()
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
 
-	this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
+	//this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
+
+	players.getFirstNth(1,true).setVelocityY(200);
 
 	controlledPlayer = players.getFirstNth(1,true);
 	cursors = this.input.keyboard.createCursorKeys();
@@ -115,6 +124,7 @@ function create()
 
 	this.physics.add.collider(players, players, hitPlatform, null, this);
 	this.physics.add.collider(players, platforms, hitPlatform, null, this);
+	this.physics.add.collider(players, sidePlatforms, hitSidePlatform, null, this);
 
 }
 
@@ -130,19 +140,19 @@ function cursorKeyInputHandler() {
 	if (controlledPlayer) {
 		if (cursors.left.isDown)
 		{
-			controlledPlayer.setPosition(controlledPlayer.x - 10, controlledPlayer.y);
+			controlledPlayer.setVelocityX(-200);
 		}
 		else if (cursors.right.isDown)
 		{
-			controlledPlayer.setPosition(controlledPlayer.x + 10, controlledPlayer.y);
+			controlledPlayer.setVelocityX(200);
 		}
 		else if (cursors.down.isDown)
 		{
-			//controlledPlayer.setPosition(controlledPlayer.x, controlledPlayer.y + 10);
+			controlledPlayer.setVelocityX(0);
 		}	
 		else
 		{
-			//controlledPlayer.setVelocityX(0);
+
 		}
 
 	}
@@ -169,8 +179,18 @@ function hitPlatform(player, platform)
 	player.body.allowGravity = false;
 	player.setVelocityY(0);
 	player.body.stop();
-	//platform.setVelocityY(0);
-	//platform.setVelocityY(0);
+	platform.body.immovable = true;
+	platform.body.allowGravity = false;
+	platform.body.stop();
+	
+
+}
+
+function hitSidePlatform(player, platform)
+{
+	console.log(player.texture.key + " hit " + platform.texture.key);
+
+	player.setVelocityX(0);
 	platform.body.immovable = true;
 	platform.body.allowGravity = false;
 	platform.body.stop();
@@ -184,7 +204,6 @@ function spawnNextPlayable()
 	if (iteration == 0) 
 	{
 		console.log(Phaser.Physics.Arcade);
-		//currentScene.add.collider(players, players, hitPlatform, null, this);
 		console.log("iteration: " + iteration);
 		console.log("Spawn the next one");	
 		controlledPlayer = players.getFirstNth(1,true);
