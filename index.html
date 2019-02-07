@@ -109,6 +109,7 @@ function create()
 
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
+	
 
 	//this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
 
@@ -159,16 +160,9 @@ function cursorKeyInputHandler() {
 
 }
 
-
-function starHitStar(star1, star2)
-{
- 	star1.body.stop();
- 	star2.body.stop();
-}
-
 function hitPlatform(player, platform)
 {
-	console.log(player.texture.key + " hit " + platform.texture.key);
+	console.log(player.texture.key + " hit platform with key " + platform.texture.key);
 
 	if (stopSpawning == false) {
 	spawnNextPlayable();
@@ -188,7 +182,7 @@ function hitPlatform(player, platform)
 
 function hitSidePlatform(player, platform)
 {
-	console.log(player.texture.key + " hit " + platform.texture.key);
+	console.log(player.texture.key + " hit side platform with key " + platform.texture.key);
 
 	player.setVelocityX(0);
 	platform.body.immovable = true;
@@ -215,24 +209,27 @@ function spawnNextPlayable()
 	{
 		console.log("iteration: " + iteration);
 		console.log("Spawn the next one?");
-		//player2.enableBody();
-		controlledPlayer = player2;
+		players.create(400,-200, 'milk_1percent', 1, true, true);
+		players.getFirstNth(2,true).setVelocityY(200);
+		controlledPlayer = players.getFirstNth(2,true);
 		iteration++;
 
 	} else if (iteration == 2)
 	{
 		console.log("iteration: " + iteration);
 		console.log("Spawn the next one?");
-		player3.enableBody();
-		controlledPlayer = player3;
+		players.create(400,-200, 'dogbriscuts', 1, true, true);
+		players.getFirstNth(3,true).setVelocityY(200);
+		controlledPlayer = players.getFirstNth(3,true);
 		iteration++;
 
 	} else if (iteration == 3)
 	{
 		console.log("iteration: " + iteration);
 		console.log("Spawn the next one?");
-		player4.enableBody();
-		controlledPlayer = player4;
+		players.create(400,-200, 'fiddle_faddle', 1, true, true);
+		players.getFirstNth(4,true).setVelocityY(200);
+		controlledPlayer = players.getFirstNth(4,true);
 		iteration++;
 
 	} 
@@ -241,7 +238,7 @@ function spawnNextPlayable()
 
 	else 
 	{
-		//console.log("Nothing left to Iterate?");
+		console.log("Nothing left to Iterate?");
 	}
 
 }
