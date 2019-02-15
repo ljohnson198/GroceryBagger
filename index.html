@@ -13,7 +13,6 @@
 
 <body bgcolor="Black" align="center">
 
-
 <script type="text/javascript">
 
 	var config = {
@@ -68,21 +67,16 @@ var stopSpawning = false;
 
 function preload()
 {
-
-
 	this.load.image('background','assets/basicbaggingbackground.png');
 
 	this.load.image('transparent','assets/transparent.png');
 	this.load.image('ground','assets/platform.png');
-	this.load.image('star','assets/star.png');
-	this.load.image('bomb','assets/bomb.png');
 	this.load.spritesheet('dude','assets/dude.png',{ frameWidth: 32, frameHeight: 48 });
 
 	this.load.image('eggs','assets/eggs.png');
 	this.load.image('milk_1percent','assets/milk_1percent.png');
 	this.load.image('dogbriscuts','assets/dogbriscuts.png');
 	this.load.image('fiddle_faddle','assets/fiddle_faddle.png');
-
 }
 
 function create()
@@ -99,20 +93,12 @@ function create()
 	sidePlatforms.create(128,558, 'ground2', {immovable: true}).setDisplaySize(32,1600).refreshBody();
 	sidePlatforms.create(675,558, 'ground2', {immovable: true}).setDisplaySize(32,1600).refreshBody();
 
-	// 
-	backGround = this.add.sprite(400, 300, 'background');
-
-	// 'Ground' (used for Physics)
-	
+	backGround = this.add.sprite(400, 300, 'background');	
 
 	// Player Character	
-
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
 	
-
-	//this.physics.accelerateToObject(players.getFirstNth(1,true), ground, 60, 300, 300);
-
 	players.getFirstNth(1,true).setVelocityY(200);
 
 	controlledPlayer = players.getFirstNth(1,true);
@@ -122,8 +108,7 @@ function create()
 	spawnNextPlayable();
 
 	// Colliders (fpr impacts between object groups)
-
-	this.physics.add.collider(players, players, hitPlatform, null, this);
+	this.physics.add.collider(players, players, hitOtherGrocery, null, this);
 	this.physics.add.collider(players, platforms, hitPlatform, null, this);
 	this.physics.add.collider(players, sidePlatforms, hitSidePlatform, null, this);
 
@@ -160,6 +145,25 @@ function cursorKeyInputHandler() {
 
 }
 
+
+function hitOtherGrocery(player, platform)
+{
+	console.log(player.texture.key + " hit platform with key " + platform.texture.key);
+
+	if (stopSpawning == false) {
+	spawnNextPlayable();
+	}
+	
+	player.body.immovable = true;
+	player.body.allowGravity = false;
+	player.setVelocityY(0);
+	player.body.stop();
+	platform.body.immovable = true;
+	platform.body.allowGravity = false;
+	platform.body.stop();	
+
+}
+
 function hitPlatform(player, platform)
 {
 	console.log(player.texture.key + " hit platform with key " + platform.texture.key);
@@ -167,7 +171,6 @@ function hitPlatform(player, platform)
 	if (stopSpawning == false) {
 	spawnNextPlayable();
 	}
-
 
 	player.body.immovable = true;
 	player.body.allowGravity = false;
