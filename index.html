@@ -141,7 +141,6 @@ function create()
 	cursors = this.input.keyboard.createCursorKeys();
 
 	// Spawn First Item
-	pickNextPlayable();
 	spawnNextPlayable();
 
 	// Colliders (fpr impacts between object groups)
@@ -219,19 +218,6 @@ function hitSidePlatform(player, platform)
 	platform.body.allowGravity = false;
 	platform.body.stop();
 	
-
-}
-
-
-function pickNextPlayable()
-{
-
-	players.create(400,-200, 'milk_1percent', 1, true, true);
-	players.create(400,-200, 'dogbriscuts', 1, true, true);
-	players.create(400,-200, 'fiddle_faddle', 1, true, true);
-
-
-	Remove(players, 3);
 
 }
 
