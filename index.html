@@ -40,6 +40,11 @@
 	};
 
 //Globals
+
+var inputLag = 16;
+var timedEvent;
+var initialYVelocity = 200;
+
 var currentScene = this;
 var score = 0;
 var scoreText;
@@ -79,8 +84,39 @@ function preload()
 	this.load.image('fiddle_faddle','assets/fiddle_faddle.png');
 }
 
+
 function create()
 {	
+
+
+// Input Listeners 
+
+	this.input.keyboard.on('keydown_LEFT', (event) => 
+	{
+		console.log("Left Key Pressed");
+		controlledPlayer.setVelocityX(-2200);
+		timedEvent = this.time.delayedCall(inputLag, resetXVelocity, [], this);
+	}
+	);
+
+	this.input.keyboard.on('keydown_RIGHT', (event) => 
+	{
+		console.log("Right Key Pressed");
+		controlledPlayer.setVelocityX(2200);
+		timedEvent = this.time.delayedCall(inputLag, resetXVelocity, [], this);
+	}
+	);
+
+	this.input.keyboard.on('keydown_DOWN', (event) => 
+	{
+		console.log("Down Key Pressed");
+		controlledPlayer.setVelocityY(20000);
+		timedEvent = this.time.delayedCall(inputLag, resetYVelocity, [], this);
+	}
+	);
+
+
+
 
 	// Background
 	ground = this.add.sprite(400, 100, 'dude2');
@@ -99,7 +135,7 @@ function create()
 	players = this.physics.add.group();
 	players.create(400,-200, 'eggs', 1, true, true);
 	
-	players.getFirstNth(1,true).setVelocityY(200);
+	players.getFirstNth(1,true).setVelocityY(initialYVelocity);
 
 	controlledPlayer = players.getFirstNth(1,true);
 	cursors = this.input.keyboard.createCursorKeys();
@@ -117,34 +153,24 @@ function create()
 function update()
 {
 
-	cursorKeyInputHandler();
+
 
 }
 
-function cursorKeyInputHandler() {
+function resetXVelocity() {
 
-	if (controlledPlayer) {
-		if (cursors.left.isDown)
-		{
-			controlledPlayer.setVelocityX(-200);
-		}
-		else if (cursors.right.isDown)
-		{
-			controlledPlayer.setVelocityX(200);
-		}
-		else if (cursors.down.isDown)
-		{
-			controlledPlayer.setVelocityX(0);
-		}	
-		else
-		{
-
-		}
-
-	}
+	controlledPlayer.setVelocityX(0);
+	console.log("Tried To Set X Velocity To 0");
 
 }
 
+
+function resetYVelocity() {
+
+	controlledPlayer.setVelocityY(initialYVelocity);
+	console.log("Tried To Set Y Velocity To 0");
+
+}
 
 function hitOtherGrocery(player, platform)
 {
