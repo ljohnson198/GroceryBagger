@@ -42,6 +42,7 @@
 //Globals
 
 var inputLag = 16;
+var inputLagVert = 64;
 var timedEvent;
 var initialYVelocity = 200;
 
@@ -67,6 +68,7 @@ var gameOver;
 var iteration = 0;
 var stopSpawning = false;
 
+var overlay_bagged;
 
 // END Globals
 
@@ -78,10 +80,11 @@ function preload()
 	this.load.image('ground','assets/platform.png');
 	this.load.spritesheet('dude','assets/dude.png',{ frameWidth: 32, frameHeight: 48 });
 
-	this.load.image('eggs','assets/eggs.png');
-	this.load.image('milk_1percent','assets/milk_1percent.png');
-	this.load.image('dogbriscuts','assets/dogbriscuts.png');
-	this.load.image('fiddle_faddle','assets/fiddle_faddle.png');
+	this.load.image('eggs','assets/eggs_resized.png');
+	this.load.image('milk_1percent','assets/milk_resized.png');
+	this.load.image('dogbriscuts','assets/dogbriscuts_resized.png');
+	this.load.image('fiddle_faddle','assets/fiddle_faddle_resized.png');
+	this.load.image('bagged','assets/bagged_withdandruff.png');
 }
 
 
@@ -89,7 +92,7 @@ function create()
 {	
 
 
-// Input Listeners 
+	// Input Listeners 
 
 	this.input.keyboard.on('keydown_LEFT', (event) => 
 	{
@@ -110,13 +113,10 @@ function create()
 	this.input.keyboard.on('keydown_DOWN', (event) => 
 	{
 		console.log("Down Key Pressed");
-		controlledPlayer.setVelocityY(20000);
-		timedEvent = this.time.delayedCall(inputLag, resetYVelocity, [], this);
+		controlledPlayer.setVelocityY(160000);
+		timedEvent = this.time.delayedCall(inputLagVert, resetYVelocity, [], this);
 	}
 	);
-
-
-
 
 	// Background
 	ground = this.add.sprite(400, 100, 'dude2');
@@ -140,6 +140,14 @@ function create()
 	controlledPlayer = players.getFirstNth(1,true);
 	cursors = this.input.keyboard.createCursorKeys();
 
+
+	// Overlays
+	overlay_bagged = this.add.sprite(400,300,'bagged');
+	overlay_bagged.alpha = 0;
+	overlay_bagged.depth = 0;
+
+
+
 	// Spawn First Item
 	spawnNextPlayable();
 
@@ -152,8 +160,6 @@ function create()
 
 function update()
 {
-
-
 
 }
 
@@ -217,7 +223,6 @@ function hitSidePlatform(player, platform)
 	platform.body.immovable = true;
 	platform.body.allowGravity = false;
 	platform.body.stop();
-	
 
 }
 
@@ -260,14 +265,11 @@ function spawnNextPlayable()
 		players.getFirstNth(4,true).setVelocityY(200);
 		controlledPlayer = players.getFirstNth(4,true);
 		iteration++;
-
-	} 
-
-
-
+	} 	
 	else 
 	{
 		console.log("Nothing left to Iterate?");
+		
 	}
 
 }
