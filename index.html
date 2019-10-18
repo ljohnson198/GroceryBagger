@@ -74,6 +74,7 @@ var overlay_bagged;
 
 function preload()
 {
+	console.log("This in preload: " + this);
 	this.load.image('background','assets/basicbaggingbackground.png');
 
 	this.load.image('transparent','assets/transparent.png');
@@ -90,8 +91,7 @@ function preload()
 
 function create()
 {	
-
-
+	console.log("This in create: " + this);
 	// Input Listeners 
 
 	this.input.keyboard.on('keydown_LEFT', (event) => 
@@ -146,8 +146,6 @@ function create()
 	overlay_bagged.alpha = 0;
 	overlay_bagged.depth = 0;
 
-
-
 	// Spawn First Item
 	spawnNextPlayable();
 
@@ -160,11 +158,13 @@ function create()
 
 function update()
 {
-
+	//console.log("This in update: " + this);
+	//overlay_bagged.alpha = 100;
+	//overlay_bagged.depth = 100;
 }
 
 function resetXVelocity() {
-
+	console.log("This in resetXVelocity: " + this);
 	controlledPlayer.setVelocityX(0);
 	console.log("Tried To Set X Velocity To 0");
 
@@ -173,6 +173,7 @@ function resetXVelocity() {
 
 function resetYVelocity() {
 
+	console.log("This in resetYVelocity: " + this);
 	controlledPlayer.setVelocityY(initialYVelocity);
 	console.log("Tried To Set Y Velocity To 0");
 
@@ -180,9 +181,11 @@ function resetYVelocity() {
 
 function hitOtherGrocery(player, platform)
 {
-	console.log(player.texture.key + " hit platform with key " + platform.texture.key);
+	console.log("This in hitOtherGrocery: " + this);
+	console.log(player.texture.key + " hit grocery with key " + platform.texture.key);
 
 	if (stopSpawning == false) {
+		console.log("This: " + this);
 	spawnNextPlayable();
 	}
 	
@@ -201,6 +204,7 @@ function hitPlatform(player, platform)
 	console.log(player.texture.key + " hit platform with key " + platform.texture.key);
 
 	if (stopSpawning == false) {
+		console.log("This: " + this);
 	spawnNextPlayable();
 	}
 
@@ -269,7 +273,8 @@ function spawnNextPlayable()
 	else 
 	{
 		console.log("Nothing left to Iterate?");
-		
+		overlay_bagged.alpha = 100;
+		overlay_bagged.depth = 100;		
 	}
 
 }
